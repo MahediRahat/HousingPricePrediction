@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Property Price Prediction</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Custom CSS */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .banner {
+            background: url('/api/placeholder/1920/400') center/cover;
+            height: 300px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .main-title {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 50px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ecf0f1;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .btn-predict {
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-predict:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+
+        .slide-up {
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .banner {
+                height: 200px;
+            }
+            .main-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Banner Section -->
+    <div class="banner animate__animated animate__fadeIn">
+        <div class="banner-overlay">
+            <h1 class="main-title animate__animated animate__slideInDown">Smart Property Price Prediction</h1>
+            <p class="lead animate__animated animate__fadeIn animate__delay-1s">Get accurate property price estimates using advanced AI</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Feature Highlights -->
+        <div class="row mb-5 animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="col-md-4 text-center">
+                <div class="p-3">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h4>Accurate Predictions</h4>
+                    <p>Using advanced machine learning algorithms</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="p-3">
+                    <i class="fas fa-map-marker-alt feature-icon"></i>
+                    <h4>Location-Based</h4>
+                    <p>Considers prime locations and neighborhoods</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="p-3">
+                    <i class="fas fa-home feature-icon"></i>
+                    <h4>Multiple Properties</h4>
+                    <p>Supports various property types</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Form Section -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-container animate__animated animate__fadeInUp animate__delay-2s">
+                    <form action="/predict" method="POST">
+                        <!-- City Dropdown -->
+                        <div class="form-group">
+                            <label for="City"><i class="fas fa-city mr-2"></i>City</label>
+                            <select class="form-control" id="City" name="City" required>
+                                <option value="">Select City</option>
+                                <option value="City_chattogram">Chattogram</option>
+                                <option value="City_cumilla">Cumilla</option>
+                                <option value="City_dhaka">Dhaka</option>
+                                <option value="City_gazipur">Gazipur</option>
+                                <option value="City_narayanganj-city">Narayanganj</option>
+                            </select>
+                        </div>
+
+                        <!-- Location Dropdown -->
+                        <div class="form-group">
+                            <label for="Location"><i class="fas fa-map-pin mr-2"></i>Location</label>
+                            <select class="form-control" name="Location" id="Location" required>
+                                <option value="">--Select Location--</option>
+                                <option value="Gulshan">Gulshan</option>
+                            <option value="Kalabagan">Kalabagan</option>
+                            <option value="Dhanmondi">Dhanmondi</option>
+                            <option value="Bashundhara R-A">Bashundhara R-A</option>
+                            <option value="Banani">Banani</option>
+                            <option value="Badda">Badda</option>
+                            <option value="Demra">Demra</option>
+                            <option value="Aftab Nagar">Aftab Nagar</option>
+                            <option value="Shyampur">Shyampur</option>
+                            <option value="Uttara">Uttara</option>
+                            <option value="Kathalbagan">Kathalbagan</option>
+                            <option value="Adabor">Adabor</option>
+                            <option value="Mirpur">Mirpur</option>
+                            <option value="Mohammadpur">Mohammadpur</option>
+                            <option value="Niketan">Niketan</option>
+                            <option value="Shantinagar">Shantinagar</option>
+                            <option value="Sutrapur">Sutrapur</option>
+                            <option value="Dakshin Khan">Dakshin Khan</option>
+                            <option value="Agargaon">Agargaon</option>
+                            <option value="Keraniganj">Keraniganj</option>
+                            <option value="Rampura">Rampura</option>
+                            <option value="Ibrahimpur">Ibrahimpur</option>
+                            <option value="Mohakhali">Mohakhali</option>
+                            <option value="Lalmatia">Lalmatia</option>
+                            <option value="Khilgaon">Khilgaon</option>
+                            <option value="Tejgaon">Tejgaon</option>
+                            <option value="Maghbazar">Maghbazar</option>
+                            <option value="Banasree">Banasree</option>
+                            <option value="Savar">Savar</option>
+                            <option value="Malibagh">Malibagh</option>
+                            <option value="Cantonment">Cantonment</option>
+                            <option value="Shiddheswari">Shiddheswari</option>
+                            <option value="Motijheel">Motijheel</option>
+                            <option value="Bashabo">Bashabo</option>
+                            <option value="Banani DOHS">Banani DOHS</option>
+                            <option value="Hazaribag">Hazaribag</option>
+                            <option value="Eskaton">Eskaton</option>
+                            <option value="Hatirpool">Hatirpool</option>
+                            <option value="Nikunja">Nikunja</option>
+                            <option value="Dumni">Dumni</option>
+                            <option value="Kafrul">Kafrul</option>
+                            <option value="Joar Sahara">Joar Sahara</option>
+                            <option value="Nadda">Nadda</option>
+                            <option value="Khilkhet">Khilkhet</option>
+                            <option value="North Shahjahanpur">North Shahjahanpur</option>
+                            <option value="Shyamoli">Shyamoli</option>
+                            <option value="Turag">Turag</option>
+                            <option value="Baridhara">Baridhara</option>
+                            <option value="Purbachal">Purbachal</option>
+                            <option value="Mugdapara">Mugdapara</option>
+                            <option value="Shegunbagicha">Shegunbagicha</option>
+                            <option value="Kachukhet">Kachukhet</option>
+                            <option value="Kuril">Kuril</option>
+                            <option value="Uttar Khan">Uttar Khan</option>
+                            <option value="Banglamotors">Banglamotors</option>
+                            <option value="Lalbagh">Lalbagh</option>
+                            <option value="Bangshal">Bangshal</option>
+                            <option value="Shahjahanpur">Shahjahanpur</option>
+                            <option value="Baridhara DOHS">Baridhara DOHS</option>
+                            <option value="4 No Chandgaon Ward">4 No Chandgaon Ward</option>
+                            <option value="15 No. Bagmoniram Ward">15 No. Bagmoniram Ward</option>
+                            <option value="7 No. West Sholoshohor Ward">7 No. West Sholoshohor Ward</option>
+                            <option value="9 No. North Pahartali Ward">9 No. North Pahartali Ward</option>
+                            <option value="Muradpur">Muradpur</option>
+                            <option value="Bayazid">Bayazid</option>
+                            <option value="Khulshi">Khulshi</option>
+                            <option value="Jamal Khan">Jamal Khan</option>
+                            <option value="Double Mooring">Double Mooring</option>
+                            <option value="Bakalia">Bakalia</option>
+                            <option value="Halishahar">Halishahar</option>
+                            <option value="Kotwali">Kotwali</option>
+                            <option value="Sholokbahar">Sholokbahar</option>
+                            <option value="East Nasirabad">East Nasirabad</option>
+                            <option value="Jalalabad Housing Society">Jalalabad Housing Society</option>
+                            <option value="33 No. Firingee Bazaar Ward">33 No. Firingee Bazaar Ward</option>
+                            <option value="10 No. North Kattali Ward">10 No. North Kattali Ward</option>
+                            <option value="11 No. South Kattali Ward">11 No. South Kattali Ward</option>
+                            <option value="22 No. Enayet Bazaar Ward">22 No. Enayet Bazaar Ward</option>
+                            <option value="16 No. Chawk Bazaar Ward">16 No. Chawk Bazaar Ward</option>
+                            <option value="Panchlaish">Panchlaish</option>
+                            <option value="30 No. East Madarbari Ward">30 No. East Madarbari Ward</option>
+                            <option value="32 No. Andarkilla Ward">32 No. Andarkilla Ward</option>
+                            <option value="Lal Khan Bazaar">Lal Khan Bazaar</option>
+                            <option value="Railway Colony">Railway Colony</option>
+                            <option value="Kazir Dewri">Kazir Dewri</option>
+                            <option value="Hathazari">Hathazari</option>
+                            <option value="South Khulsi">South Khulsi</option>
+                            <option value="31 No. Alkoron Ward">31 No. Alkoron Ward</option>
+                            <option value="29 No. West Madarbari Ward">29 No. West Madarbari Ward</option>
+                            <option value="26 No. Noor Nagar Ward">26 No. Noor Nagar Ward</option>
+                            <option value="18 No. East Rampura Ward">18 No. East Rampura Ward</option>
+                            <option value="24 No. North Khalishpur Ward">24 No. North Khalishpur Ward</option>
+                            <option value="19 No. West Anwara Ward">19 No. West Anwara Ward</option>
+                            <option value="17 No. East Anwara Ward">17 No. East Anwara Ward</option>
+                            <option value="20 No. East Sundarban Ward">20 No. East Sundarban Ward</option>
+                            <option value="12 No. Shatir Bazar Ward">12 No. Shatir Bazar Ward</option>
+                            <option value="13 No. Jalimnagar Ward">13 No. Jalimnagar Ward</option>
+                            <option value="23 No. Dargah Ward">23 No. Dargah Ward</option>
+                            <option value="28 No. Jorarganj Ward">28 No. Jorarganj Ward</option>
+                            <option value="25 No. West Aftabnagar Ward">25 No. West Aftabnagar Ward</option>
+                        </select>
+                    </div>
+                                <!-- Your existing location options -->
+                               
+                            </select>
+                        </div>
+
+                        <!-- Property Details Row -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Bedrooms"><i class="fas fa-bed mr-2"></i>Bedrooms</label>
+                                    <input type="number" class="form-control" id="Bedrooms" name="Bedrooms" placeholder="Enter number of bedrooms" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Bathrooms"><i class="fas fa-bath mr-2"></i>Bathrooms</label>
+                                    <input type="number" class="form-control" id="Bathrooms" name="Bathrooms" placeholder="Enter number of bathrooms" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area and Floor Row -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Floor_area"><i class="fas fa-vector-square mr-2"></i>Floor Area (sqft)</label>
+                                    <input type="number" class="form-control" id="Floor_area" name="Floor_area" placeholder="Enter floor area" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Floor_no"><i class="fas fa-building mr-2"></i>Floor Number</label>
+                                    <input type="number" class="form-control" id="Floor_no" name="Floor_no" placeholder="Enter floor number" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Property Type -->
+                        <div class="form-group">
+                            <label for="Property_type"><i class="fas fa-home mr-2"></i>Property Type</label>
+                            <select class="form-control" id="Property_type" name="Property_type" required>
+                                <option value="">Select Property Type</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="Condominium">Condominium</option>
+                                <option value="Duplex">Duplex</option>
+                                <option value="House">House</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-predict btn-block">
+                            <i class="fas fa-calculator mr-2"></i>Predict Price
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-5">
+        <p>© 2024 Smart Property Price Prediction. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+
+        // Add input animations
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('slide-up');
+            });
+        });
+    </script>
+</body>
+</html>
